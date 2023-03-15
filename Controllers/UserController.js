@@ -14,6 +14,9 @@ export const EditUser = async (req, res) => {
     res.status(201).end();
 }
 
+export const getCurrentUser = async (req, res) => {
+    res.status(200).send(req.user);
+}
 
 export const createUser = async (request, response,next) => {
        // Valider les données reçu du client

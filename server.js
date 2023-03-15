@@ -11,7 +11,7 @@ import middlewareSse from './middleware-sse.js';
 import { getTodos, addTodo, checkTodo } from './model/todo.js';
 import { validateContact } from './validation.js';
 import './authentification.js';
-import {createUser,logUser,logOutUser, EditUser, getUsers } from './Controllers/UserController.js';
+import {createUser,logUser,logOutUser, EditUser, getUsers,getCurrentUser } from './Controllers/UserController.js';
 import { addProject, editProject, getDonnees, getProjectById, getAllProjects} from './Controllers/DataController.js';
 import { getTickets, addTicket,addMember,deleteMember,getTicketById,editTicket, 
         getCommentsByTicketId,deleteComment,addComment} from './Controllers/TicketController.js';
@@ -99,6 +99,7 @@ app.get('/ticket/comments',getCommentsByTicketId);
 app.post('/ticket/comment/',addComment);
 app.delete('/ticket/comment/delete',deleteComment);
 
+app.get('/user',getCurrentUser);
 app.post('/user/register', createUser);
 app.post('/user/login', logUser);
 app.post('/user/logout', logOutUser);
