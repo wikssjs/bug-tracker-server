@@ -55,6 +55,7 @@ app.use(helmet());
 app.use(cors());
 app.use(compression());
 app.use(json());
+app.use(validateApiKey);
 app.use(session({
     cookie: { maxAge: 1800000 },
     name: process.env.npm_package_name,
@@ -67,7 +68,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(middlewareSse());
 app.use(express.static('public'));
-app.use(validateApiKey);
 
 
 
@@ -104,6 +104,15 @@ app.post('/user/register', createUser);
 app.post('/user/login', logUser);
 app.post('/user/logout', logOutUser);
 
+
+app.get('/james', (request, response) => {
+    console.log('James');
+    console.log(request.user);
+    response.status(200).json(
+        {message: 'James',
+        user: request.user
+});
+});
 
 app.get('/apropos', (request, response) => {
     if(request.session.countAPropos === undefined) {

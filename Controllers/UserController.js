@@ -15,7 +15,9 @@ export const EditUser = async (req, res) => {
 }
 
 export const getCurrentUser = async (req, res) => {
-    res.status(200).send(req.user);
+    res.status(200).json({
+        user: req.user,    
+    });
 }
 
 export const createUser = async (request, response,next) => {
