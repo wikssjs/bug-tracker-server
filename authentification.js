@@ -1,7 +1,9 @@
-import { compare } from "bcrypt";
+import pkg from "bcryptjs";
 import passport from 'passport';
 import { Strategy } from "passport-local";
 import { getUserByEmail } from "./model/utilisateur.js";
+
+const { compare } = pkg;
 
 let config = {
     usernameField: 'email',

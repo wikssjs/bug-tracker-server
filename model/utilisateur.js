@@ -1,5 +1,6 @@
 import { promesseConnexion } from './connexion.js';
-import { hash } from 'bcrypt';
+import pkg from 'bcryptjs';
+const { hash } = pkg;
 
 
 

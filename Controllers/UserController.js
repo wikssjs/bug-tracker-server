@@ -1,7 +1,5 @@
 import { getAllUsers,editUserModel,addUserModel } from '../model/utilisateur.js';
-import { hash } from 'bcrypt';
 import passport from 'passport';
-import { Strategy } from "passport-local";
 
 
 export const getUsers = async (req, res) => {
