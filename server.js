@@ -32,7 +32,10 @@ const MemoryStore = memorystore(session);
 
 // Ajout de middlewares
 app.use(helmet());
-app.use(cors());
+app.use(cors({
+    origin: 'https://james-bug-tracker.vercel.app,http://localhost:3000',
+    credentials: true,
+}));
 app.use(compression());
 app.use(json());
 app.use(validateApiKey);
