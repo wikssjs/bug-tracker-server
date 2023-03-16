@@ -26,26 +26,6 @@ const validateApiKey = (req, res, next) => {
     next();
   };
 
-// Création de l'engin dans Express
-app.engine('handlebars', engine({
-    helpers: {
-        afficheArgent: (nombre) => nombre && nombre.toFixed(2) + ' $'
-        /*{
-            if(nombre){
-                return nombre.toFixed(2) + ' $';
-            }
-            else {
-                return null;
-            }
-        }*/
-    }
-}));
-
-// Mettre l'engin handlebars comme engin de rendu
-app.set('view engine', 'handlebars');
-
-// Configuration de handlebars
-app.set('views', './views');
 
 // Créer le constructeur de base de données
 const MemoryStore = memorystore(session);
@@ -67,9 +47,6 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(middlewareSse());
-app.use(express.static('public'));
-
-
 
 
 // Programmation de routes
