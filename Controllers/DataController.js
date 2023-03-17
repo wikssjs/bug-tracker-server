@@ -1,7 +1,7 @@
 import { getProjects,getContributors,addProjectModel,editProjectModel,getProjectByIdModel,getTeamByProjectIdModel, getOpenBugs,getInProgressBugs,getClosedBugs} from '../model/bug.js';
 
 export const getDonnees = async (request, response) => {
-    response.status(200).json({
+       response.status(200).json({
         titre: 'Todo',
         projects: await getProjects(),
         contributors: await getContributors(),
@@ -10,6 +10,7 @@ export const getDonnees = async (request, response) => {
         closedBugs:await getClosedBugs(),
     });
 }
+
 
 
 console.log(await getProjects())

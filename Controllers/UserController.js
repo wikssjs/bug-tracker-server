@@ -1,5 +1,6 @@
-import { getAllUsers,editUserModel,addUserModel } from '../model/utilisateur.js';
+import { getAllUsers,editUserModel,addUserModel, getUserByEmail } from '../model/utilisateur.js';
 import passport from 'passport';
+import jwt from 'jsonwebtoken';
 
 
 export const getUsers = async (req, res) => {
@@ -15,9 +16,16 @@ export const EditUser = async (req, res) => {
 }
 
 export const getCurrentUser = async (req, res) => {
-    res.status(200).json({
-        user: req.user,    
-    });
+    const token = req.headers.authorization.split(' ')[1]; // Extract token from Authorization header
+  try {
+    const decodedToken = jwt.verify(token, process.env.SESSION_SECRET);
+    const userEmail = decodedToken.email;
+    const currentUser = await getUserByEmail(userEmail); // This is a hypothetical function to retrieve the user from a database
+    console.log(currentUser);
+    res.json(currentUser);
+  } catch (error) {
+    res.status(401).json({ message: 'Invalid or expired token' });
+  }
 }
 
 export const createUser = async (request, response,next) => {
@@ -58,7 +66,8 @@ export const logUser = async (request, response,next) => {
                     next(error);
                 }
                 else {
-                    response.status(200).end();
+                    const token = jwt.sign({email:utilisateur.email}, process.env.SESSION_SECRET, {expiresIn: '1h'});
+                    response.status(200).json({token});
                 }
             });
         }
