@@ -152,7 +152,6 @@ export const editTicketModel = async (id, title, description, status, priority, 
 
     );
 
-    console.log(id, title, description, status, priority, project_id, reported_by, assignees_users);
 
     let resultat2 = await connexion.run(
         `delete from ticket_user where ticket_id = ?`,

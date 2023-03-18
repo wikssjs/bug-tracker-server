@@ -1,3 +1,4 @@
+import jwt from 'jsonwebtoken';
 import { getAllTickets,addTicketModel,addMemberModel,deleteMemberModel,
         getTicketByIdModel,getAssignersModel,editTicketModel,getCommentsByTicketIdModel,deleteCommentModel,addCommentModel } from "../model/ticket.js";
 
@@ -9,7 +10,11 @@ export const getTickets = async (request, response) => {
 
 
 export const addTicket = async (request, response) => {
-    await addTicketModel(request.body.title, request.body.description, request.body.status, request.body.priority, request.body.project_id,4, request.body.assignees_users);
+    const token = request.headers.authorization.split(' ')[1]; // Extract token from Authorization header
+      const decodedToken = jwt.verify(token, process.env.SESSION_SECRET);
+      const userId = decodedToken.id;
+
+     await addTicketModel(request.body.title, request.body.description, request.body.status, request.body.priority, request.body.project_id,userId, request.body.assignees_users);
     response.status(201).end();
 }
 
@@ -49,6 +54,9 @@ export const deleteComment = async (request, response) => {
 }
 
 export const addComment = async (request, response) => {
-    await addCommentModel(request.body.text,request.body.ticket_id,2);
+    const token = request.headers.authorization.split(' ')[1]; // Extract token from Authorization header
+        const decodedToken = jwt.verify(token, process.env.SESSION_SECRET);
+        const userId = decodedToken.id;
+    await addCommentModel(request.body.text,request.body.ticket_id,userId);
     response.status(201).end();
 }

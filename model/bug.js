@@ -100,11 +100,9 @@ export const editProjectModel = async (id, name, description, contributors) => {
             VALUES (?, ?)`,
             [id, contributors[i]]
         );
-        console.log(id)
     }
 
 
-    console.log(contributors);
     return resultat.lastID;
 }
 
@@ -123,7 +121,6 @@ export const getProjectByIdModel = async (id) => {
 
 export const getTeamByProjectIdModel = async (id) => {
     let connexion = await promesseConnexion;
-    console.log(id)
     let resultat = await connexion.all(
         `SELECT u.id,u.username, u.email,p.name FROM project_user
         inner join users u on u.id = project_user.user_id

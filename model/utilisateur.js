@@ -21,10 +21,8 @@ export const getAllUsers = async () => {
 
 export const editUserModel = async (id,nom,prenom,username,email,role) => {
     let connexion = await promesseConnexion;
-
     const isAdmin = role === 'Admin' ? 1 : 0;
 
-    console.log(id,nom,prenom,username,email,role,isAdmin)
     let resultat = await connexion.run(
         `UPDATE users SET nom = ?, prenom = ?, username = ?, email = ?, is_admin = ? WHERE id = ?`,
         [nom,prenom,username,email,isAdmin,id]

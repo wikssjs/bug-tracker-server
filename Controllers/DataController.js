@@ -13,15 +13,12 @@ export const getDonnees = async (request, response) => {
 
 
 
-console.log(await getProjects())
 export const getAllProjects = async (request, response) => {
-    console.log("get all projects")
     response.status(200).json({
         projects: await getProjects(),
     });
 }
 export const addProject = async (request, response) => {
-    console.log(request.body.name.toString())
     await addProjectModel(request.body.name, request.body.description, request.body.contributors);
     response.status(201).end();
 }
