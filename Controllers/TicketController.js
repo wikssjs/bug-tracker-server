@@ -1,6 +1,22 @@
 import jwt from 'jsonwebtoken';
 import { getAllTickets,addTicketModel,addMemberModel,deleteMemberModel,
         getTicketByIdModel,getAssignersModel,editTicketModel,getCommentsByTicketIdModel,deleteCommentModel,addCommentModel } from "../model/ticket.js";
+import { getUserByEmail } from '../model/utilisateur.js';
+
+
+const getCurrentUserUsername = async (request,response) => {
+    const token = request.headers.authorization.split(' ')[1]; // Extract token from Authorization header
+    try {
+        const decodedToken = jwt.verify(token, process.env.SESSION_SECRET);
+        const userEmail = decodedToken.email;
+        const currentUser = await getUserByEmail(userEmail); // This is a hypothetical function to retrieve the user from a database
+        return currentUser.username;
+    } catch (error) {
+        response.status(401).json({ message: 'Invalid or expired token' });
+    }
+}
+
+
 
 export const getTickets = async (request, response) => {
     response.status(200).json({
@@ -14,7 +30,7 @@ export const addTicket = async (request, response) => {
       const decodedToken = jwt.verify(token, process.env.SESSION_SECRET);
       const userId = decodedToken.id;
 
-     await addTicketModel(request.body.title, request.body.description, request.body.status, request.body.priority, request.body.project_id,userId, request.body.assignees_users);
+     await addTicketModel(request.body.title, request.body.description, request.body.status, request.body.priority, request.body.project_id,userId, request.body.assignees_users,await getCurrentUserUsername(request,response));
     response.status(201).end();
 }
 
@@ -37,7 +53,7 @@ export const getTicketById = async (request, response) => {
 }
 
 export const editTicket = async (request, response) => {
-   await editTicketModel(request.body.id,request.body.title, request.body.description, request.body.status, request.body.priority, request.body.project_id,4, request.body.assignees_users);
+   await editTicketModel(request.body.id,request.body.title, request.body.description, request.body.status, request.body.priority, request.body.project_id,4, request.body.assignees_users,await getCurrentUserUsername(request,response));
    response.status(201).end();
 }
 

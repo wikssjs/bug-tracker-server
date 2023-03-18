@@ -1,10 +1,10 @@
-import sqlite3 from 'sqlite3';
-import { open } from 'sqlite';
-import { existsSync } from 'fs';
+import sqlite3 from "sqlite3";
+import { open } from "sqlite";
+import { existsSync } from "fs";
 
 let promesseConnexion = open({
   filename: process.env.DB_FILE,
-  driver: sqlite3.Database
+  driver: sqlite3.Database,
 });
 
 if (!existsSync(process.env.DB_FILE)) {
@@ -80,6 +80,13 @@ if (!existsSync(process.env.DB_FILE)) {
             FOREIGN KEY (user_id) REFERENCES users (id)
           );
 
+          CREATE TABLE activities (
+            id INTEGER PRIMARY KEY,
+            action TEXT NOT NULL,
+            username TEXT NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+          );
+
           INSERT INTO projects (name, description) VALUES ('React', 'A JavaScript library for building user interfaces');
           INSERT INTO projects (name, description) VALUES ('Django', 'A high-level Python web framework');
           INSERT INTO projects (name, description) VALUES ('TensorFlow', 'An open-source machine learning library');
@@ -152,10 +159,56 @@ VALUES
             INSERT INTO comments (text, ticket_id, user_id) VALUES ('Is there any update on this?', 9, 5);
             INSERT INTO comments (text, ticket_id, user_id) VALUES ('Thank you for your prompt response', 10, 1);
 
+
+            INSERT INTO activities (action, username)
+VALUES
+  ("Edited ticket: Fix login button [React]", 'johndoe'),
+  ("Edited ticket: Update pricing page [Django]", 'janedoe'),
+  ("Edited ticket: Add search feature [React]", 'admin'),
+  ("Edited ticket: Fix broken links [TensorFlow]", 'bob'),
+  ("Edited ticket: Update logo [Django]", 'sarahjone'),
+  ("Edited ticket: Add payment gateway [React]", 'james'),
+  ("Edited ticket: Improve performance [TensorFlow]", 'johndoe'),
+  ("Edited ticket: Fix formatting issues [Django]", 'janedoe'),
+  ("Edited ticket: Add social media links [React]", 'admin'),
+  ("Edited ticket: Fix broken images [TensorFlow]", 'bob'),
+  ("Edited project: React", 'sarahjone'),
+  ("Edited project: Django", 'james'),
+  ("Edited project: TensorFlow", 'johndoe'),
+  ("Edited project: Vue.js", 'janedoe'),
+  ("Edited project: Spring Boot", 'admin'),
+  ("Edited project: React", 'bob'),
+  ("Edited project: Django", 'sarahjone'),
+  ("Edited project: TensorFlow", 'james'),
+  ("Edited project: Vue.js", 'johndoe'),
+  ("Edited project: Spring Boot", 'janedoe');
+
+  INSERT INTO activities (action, username)
+VALUES
+  ("Added ticket: Fix login button [React]", 'johndoe'),
+  ("Added ticket: Update pricing page [Django]", 'janedoe'),
+  ("Added ticket: Add search feature [React]", 'admin'),
+  ("Added ticket: Fix broken links [TensorFlow]", 'bob'),
+  ("Added ticket: Update logo [Django]", 'sarahjone'),
+  ("Added ticket: Add payment gateway [React]", 'james'),
+  ("Added ticket: Improve performance [TensorFlow]", 'johndoe'),
+  ("Added ticket: Fix formatting issues [Django]", 'janedoe'),
+  ("Added ticket: Add social media links [React]", 'admin'),
+  ("Added ticket: Fix broken images [TensorFlow]", 'bob'),
+  ("Added project: React", 'sarahjone'),
+  ("Added project: Django", 'james'),
+  ("Added project: TensorFlow", 'johndoe'),
+  ("Added project: Vue.js", 'janedoe'),
+  ("Added project: Spring Boot", 'admin'),
+  ("Added project: React", 'bob'),
+  ("Added project: Django", 'sarahjone'),
+  ("Added project: TensorFlow", 'james'),
+  ("Added project: Vue.js", 'johndoe'),
+  ("Added project: Spring Boot", 'janedoe');
+
+
         `
-
-
-    )
+    );
 
     return connexion;
   });

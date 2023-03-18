@@ -1,5 +1,14 @@
 import { promesseConnexion } from './connexion.js';
 
+const getProjectName = async (id) => {
+    let connexion = await promesseConnexion;
+    let resultat = await connexion.get(
+        `SELECT name FROM projects WHERE id = ?`,
+        [id]
+    )
+    return resultat;
+}
+
 
 export const getAllTickets = async () => {
     let connexion = await promesseConnexion;
@@ -29,7 +38,7 @@ export const getAllTickets = async () => {
 }
 
 
-export const addTicketModel = async (title, description, status, priority, project_id, reported_by, assignees_users) => {
+export const addTicketModel = async (title, description, status, priority, project_id, reported_by, assignees_users,username) => {
     let connexion = await promesseConnexion;
 
     let resultat = await connexion.run(
@@ -46,6 +55,14 @@ export const addTicketModel = async (title, description, status, priority, proje
             [resultat.lastID, assignees_users[i]]
         );
     }
+
+    
+    const project = await getProjectName(project_id);
+    const name = project.name;
+    let resultat3 = await connexion.run(
+        `INSERT INTO ACTIVITIES (action,username) 
+        VALUES ("Added Ticket: ${title} [${name}]","${username}")`
+    );
     return resultat.lastID;
 }
 
@@ -142,7 +159,7 @@ export const getAssignersModel = async (id) => {
     return resultat;
 }
 
-export const editTicketModel = async (id, title, description, status, priority, project_id, reported_by, assignees_users) => {
+export const editTicketModel = async (id, title, description, status, priority, project_id, reported_by, assignees_users,username) => {
     let connexion = await promesseConnexion;
 
     let resultat = await connexion.run(
@@ -167,6 +184,15 @@ export const editTicketModel = async (id, title, description, status, priority, 
             [id, assignees_users[i]]
         );
     }
+
+    const project = await getProjectName(project_id);
+    const name = project.name;
+    let resultat4 = await connexion.run(
+        `INSERT INTO ACTIVITIES (action,username) 
+        VALUES ("Edited Ticket: ${title} [${name}]","${username}")`
+    );
+
+
     return resultat.lastID;
 }
 

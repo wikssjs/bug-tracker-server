@@ -53,7 +53,19 @@ export const getContributors = async () => {
     return resultat;
 }
 
-export const addProjectModel = async (name, description, contributors) => {
+export const getActivities = async () => {
+    let connexion = await promesseConnexion;
+
+    let resultat = await connexion.all(
+        `SELECT * FROM activities
+        ORDER BY created_at DESC`
+    )
+    return resultat;
+}
+
+
+export const addProjectModel = async (name, description, contributors,username) => {
+
     let connexion = await promesseConnexion;
     let id_project;
 
@@ -67,17 +79,22 @@ export const addProjectModel = async (name, description, contributors) => {
 
     for (let i = 0; i < contributors.length; i++) {
 
-        let resultat2 = await connexion.run(
+        await connexion.run(
             `INSERT INTO project_user (project_id,user_id)
         VALUES (?, ?)`,
             [id_project, contributors[i]]
         );
     }
 
+    await connexion.run(
+        `INSERT INTO ACTIVITIES (action,username) 
+        VALUES ('Added project: ${name}', '${username}')`
+    );
+
     return resultat.lastID;
 }
 
-export const editProjectModel = async (id, name, description, contributors) => {
+export const editProjectModel = async (id, name, description, contributors,username) => {
     let connexion = await promesseConnexion;
 
     let resultat = await connexion.run(
@@ -102,6 +119,10 @@ export const editProjectModel = async (id, name, description, contributors) => {
         );
     }
 
+    let resultat3 = await connexion.run(
+        `INSERT INTO ACTIVITIES (action,username) 
+        VALUES ("Edited project: ${name}", '${username}')`
+    );
 
     return resultat.lastID;
 }

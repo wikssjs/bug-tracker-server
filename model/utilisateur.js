@@ -47,7 +47,7 @@ export const getUserByEmail = async (email) => {
     let connexion = await promesseConnexion;
 
     let user = await connexion.get(
-        `SELECT id, email, password, is_admin
+        `SELECT id, email, password, is_admin,username
         FROM users
         WHERE email = ?`,
         [email]
