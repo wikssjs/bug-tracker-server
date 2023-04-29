@@ -1,4 +1,4 @@
-import { getAllUsers,editUserModel,addUserModel, getUserByEmail } from '../model/utilisateur.js';
+import { getAllUsers,editUserModel,addUserModel, getUserByEmail,editUserAccountModel,editUserPasswordModel } from '../model/utilisateur.js';
 import passport from 'passport';
 import jwt from 'jsonwebtoken';
 
@@ -13,6 +13,22 @@ export const getUsers = async (req, res) => {
 export const EditUser = async (req, res) => {
     await editUserModel(req.body.id,req.body.nom, req.body.prenom,req.body.username, req.body.email, req.body.role);
     res.status(201).end();
+}
+
+export const EditUserAccount = async (req, res) => {
+    await editUserAccountModel(req.body.id,req.body.lastName, req.body.firstName,req.body.username);
+    const user = await getUserByEmail(req.body.email);
+    const playload = {id:user.id, email:user.email,password:user.password,username:user.username,firstName:user.prenom,lastName:user.nom};
+    const token = jwt.sign(playload, process.env.SESSION_SECRET, {expiresIn: '1d'});
+    res.status(201).json({token});
+}
+
+export const editUserPassword = async (req, res) => {
+    await editUserPasswordModel(req.body.id,req.body.newPassword);
+    const user = await getUserByEmail(req.body.email);
+    const playload = {id:user.id, email:user.email,password:user.password,username:user.username,firstName:user.prenom,lastName:user.nom};
+    const token = jwt.sign(playload, process.env.SESSION_SECRET, {expiresIn: '1d'});
+    res.status(201).json({token});
 }
 
 export const getCurrentUser = async (req, res) => {
@@ -65,7 +81,7 @@ export const logUser = async (request, response,next) => {
                     next(error);
                 }
                 else {
-                    const token = jwt.sign({id:utilisateur.id, email:utilisateur.email}, process.env.SESSION_SECRET, {expiresIn: '1h'});
+                    const token = jwt.sign({id:utilisateur.id, email:utilisateur.email,password:utilisateur.password,username:utilisateur.username,firstName:utilisateur.prenom,lastName:utilisateur.nom}, process.env.SESSION_SECRET, {expiresIn: '1d'});
                     response.status(200).json({token});
                 }
             });

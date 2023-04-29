@@ -30,6 +30,26 @@ export const editUserModel = async (id,nom,prenom,username,email,role) => {
     return resultat;
 }
 
+export const editUserAccountModel = async (id,nom,prenom,username) => {
+    let connexion = await promesseConnexion;
+
+    let resultat = await connexion.run(
+        `UPDATE users SET nom = ?, prenom = ?, username = ? WHERE id = ?`,
+        [nom,prenom,username,id]
+    );
+    return resultat;
+}
+
+export const editUserPasswordModel = async (id,password) => {
+    let connexion = await promesseConnexion;
+    let motDePasseHash = await hash(password, 10);
+    
+    let resultat = await connexion.run(
+        `UPDATE users SET password = ? WHERE id = ?`,
+        [motDePasseHash,id]
+    );
+    return resultat;
+}
 
 export const addUserModel = async (firstname,lastname,email,username, password) => {
     let connexion = await promesseConnexion;
@@ -47,7 +67,7 @@ export const getUserByEmail = async (email) => {
     let connexion = await promesseConnexion;
 
     let user = await connexion.get(
-        `SELECT id, email, password, is_admin,username
+        `SELECT id, email, password, is_admin,username,nom,prenom
         FROM users
         WHERE email = ?`,
         [email]

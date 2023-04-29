@@ -20,6 +20,8 @@ import {
   EditUser,
   getUsers,
   getCurrentUser,
+  EditUserAccount,
+  editUserPassword,
 } from "./Controllers/UserController.js";
 import {
   addProject,
@@ -97,8 +99,6 @@ app.use(middlewareSse());
 app.get("/", getDonnees);
 app.get("projects", getAllProjects);
 
-app.get("/users", getUsers);
-app.put("/edit-user", EditUser);
 
 app.post("/add-project", addProject);
 
@@ -123,6 +123,10 @@ app.get("/user", getCurrentUser);
 app.post("/user/register", createUser);
 app.post("/user/login", logUser);
 app.post("/user/logout", logOutUser);
+app.get("/users", getUsers);
+app.put("/edit-user", EditUser);
+app.put("/edit-user-account", EditUserAccount);
+app.put("/user/change-password", editUserPassword);
 
 // Démarrage du serveur
 app.listen(process.env.PORT);
